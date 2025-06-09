@@ -2,9 +2,7 @@ import requests
 from datetime import datetime
 import subprocess
 
-# ✅ Correct API that includes your player
-API_URL = "https://api.the-finals-leaderboard.com/v1/leaderboard/s6/crossplay?name=TTV-Impieux%234861"
-PLAYER = "ttv-impieux#4861"  # lowercase match
+API_URL = "https://api.the-finals-leaderboard.com/v1/leaderboard/s6/crossplay?name=TTV-Impieux%234861".replace("#", "%23")
 FILE_PATH = "docs/latest_rank.txt"
 
 def get_rank_score():
@@ -12,11 +10,8 @@ def get_rank_score():
         resp = requests.get(API_URL)
         data = resp.json()
 
-        # Expected format: { "entries": [ { "name": ..., "rank_score": ... }, ... ] }
-        if isinstance(data, dict) and "entries" in data:
-            for entry in data["entries"]:
-                if entry.get("name", "").lower() == PLAYER:
-                    return entry.get("rank_score")
+        if "data" in data and isinstance(data["data"], list) and data["data"]:
+            return data["data"][0].get("rankScore")
     except Exception as e:
         print("Error:", e)
     return None
@@ -36,3 +31,4 @@ def log_and_push_score():
 
 if __name__ == "__main__":
     log_and_push_score()
+
