@@ -10,9 +10,10 @@ def get_rank_score():
     try:
         resp = requests.get(API_URL)
         data = resp.json()
-        # Since the top-level JSON is a list, iterate over it
-        for entry in data:
-            if isinstance(entry, dict) and entry.get("name") == PLAYER:
+        entries = data.get("entries", [])
+
+        for entry in entries:
+            if "name" in entry and entry["name"].strip().lower() == PLAYER.lower():
                 return entry.get("rank_score")
     except Exception as e:
         print("Error:", e)
