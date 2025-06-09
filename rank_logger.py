@@ -2,19 +2,21 @@ import requests
 from datetime import datetime
 import subprocess
 
-API_URL = "https://embark-discovery-leaderboard.storage.googleapis.com/leaderboard.json"
-PLAYER = "TTV-Impieux#4861"
+# ✅ Correct API that includes your player
+API_URL = "https://api.the-finals-leaderboard.com/v1/leaderboard/s6/crossplay?name=TTV-Impieux%234861"
+PLAYER = "ttv-impieux#4861"  # lowercase match
 FILE_PATH = "docs/latest_rank.txt"
 
 def get_rank_score():
     try:
         resp = requests.get(API_URL)
         data = resp.json()
-        entries = data.get("entries", [])
 
-        for entry in entries:
-            if "name" in entry and entry["name"].strip().lower() == PLAYER.lower():
-                return entry.get("rank_score")
+        # Expected format: { "entries": [ { "name": ..., "rank_score": ... }, ... ] }
+        if isinstance(data, dict) and "entries" in data:
+            for entry in data["entries"]:
+                if entry.get("name", "").lower() == PLAYER:
+                    return entry.get("rank_score")
     except Exception as e:
         print("Error:", e)
     return None
@@ -32,4 +34,5 @@ def log_and_push_score():
     else:
         print("Score not found.")
 
-log_and_push_score()
+if __name__ == "__main__":
+    log_and_push_score()
