@@ -2,7 +2,7 @@ import requests
 from datetime import datetime
 import subprocess
 
-API_URL = "https://api.the-finals-leaderboard.com/v1/leaderboard/s9/crossplay?name=TTV-Impieux%234861".replace("#", "%23")
+API_URL = "https://api.the-finals-leaderboard.com/v1/leaderboard/s9/crossplay?name=Impieux%233147".replace("#", "%23")
 FILE_PATH = "docs/latest_rank.txt"
 
 def get_rank_info():
